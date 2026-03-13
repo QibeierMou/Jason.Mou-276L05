@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1 (Python 3.14.3 on win32)" generated="2026-03-13T15:58:26.561730" rpa="false" schemaversion="5">
+<suite id="s1" name="Basket" source="C:\Users\13548\Downloads\files (2)\files\part1_acceptance\features\basket.robot">
+<kw name="Create Session" owner="RequestsLibrary" type="SETUP">
+<msg time="2026-03-13T15:58:27.206735" level="INFO">Creating Session using : alias=basket_api, url=http://localhost:5001, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>basket_api</arg>
+<arg>http://localhost:5001</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-03-13T15:58:27.206583" elapsed="0.000332"/>
+</kw>
+<test id="s1-t1" name="Add Valid Book To Basket" line="14">
+<kw name="Clear Basket" type="SETUP">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:29.240198" level="INFO">DELETE Request : url=http://localhost:5001/basket/clear 
+ path_url=/basket/clear 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:29.240430" level="INFO">DELETE Response : url=http://localhost:5001/basket/clear 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:29 GMT', 'Content-Type': 'application/json', 'Content-Length': '29', 'Connection': 'close'} 
+ body={"message":"Basket cleared"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:29.240712" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/clear</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-03-13T15:58:27.207763" elapsed="2.033022"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-13T15:58:29.242073" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-13T15:58:29.241082" elapsed="0.001133"/>
+</kw>
+<status status="PASS" start="2026-03-13T15:58:27.207548" elapsed="2.034845"/>
+</kw>
+<kw name="Given the basket is empty">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:31.269719" level="INFO">GET Request : url=http://localhost:5001/basket 
+ path_url=/basket 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:31.269781" level="INFO">GET Response : url=http://localhost:5001/basket 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:31 GMT', 'Content-Type': 'application/json', 'Content-Length': '60', 'Connection': 'close'} 
+ body={"discount_applied":null,"items":{},"subtotal":0,"total":0}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:31.269890" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2026-03-13T15:58:29.243673" elapsed="2.026239"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resp.json()}[items]</arg>
+<arg>${{{}}}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-03-13T15:58:31.270032" elapsed="0.000748"/>
+</kw>
+<status status="PASS" start="2026-03-13T15:58:29.243156" elapsed="2.027752"/>
+</kw>
+<kw name="When the customer adds book">
+<kw name="Convert To Integer" owner="BuiltIn">
+<msg time="2026-03-13T15:58:31.271639" level="INFO">${qty_int} = 1</msg>
+<var>${qty_int}</var>
+<arg>${qty}</arg>
+<doc>Converts the given item to an integer number.</doc>
+<status status="PASS" start="2026-03-13T15:58:31.271498" elapsed="0.000161"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-13T15:58:31.272049" level="INFO">${body} = {'book_id': 'BK001', 'qty': 1}</msg>
+<var>${body}</var>
+<arg>book_id=${book_id}</arg>
+<arg>qty=${qty_int}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-13T15:58:31.271747" elapsed="0.000323"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:33.324785" level="INFO">POST Request : url=http://localhost:5001/basket/item 
+ path_url=/basket/item 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '30', 'Content-Type': 'application/json'} 
+ body=b'{"book_id": "BK001", "qty": 1}' 
+ </msg>
+<msg time="2026-03-13T15:58:33.324851" level="INFO">POST Response : url=http://localhost:5001/basket/item 
+ status=201, reason=CREATED 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '41', 'Connection': 'close'} 
+ body={"basket":{"BK001":1},"message":"Added"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:33.324960" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/item</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=201</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-03-13T15:58:31.272152" elapsed="2.052831"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:58:33.325761" level="INFO">${LAST_RESPONSE} = &lt;Response [201]&gt;</msg>
+<arg>${LAST_RESPONSE}</arg>
+<arg>${resp}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-03-13T15:58:33.325127" elapsed="0.000705"/>
+</kw>
+<arg>BK001</arg>
+<arg>qty=1</arg>
+<status status="PASS" start="2026-03-13T15:58:31.271262" elapsed="2.054677"/>
+</kw>
+<kw name="Then the basket contains">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:35.360018" level="INFO">GET Request : url=http://localhost:5001/basket 
+ path_url=/basket 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:35.360078" level="INFO">GET Response : url=http://localhost:5001/basket 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '105', 'Connection': 'close'} 
+ body={"discount_applied":null,"items":{"BK001":{"name":"Clean Code","qty":1}},"subtotal":29.99,"total":29.99}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:35.360172" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2026-03-13T15:58:33.326524" elapsed="2.033669"/>
+</kw>
+<kw name="Length Should Be" owner="BuiltIn">
+<msg time="2026-03-13T15:58:35.360714" level="INFO">Length is 1.</msg>
+<arg>${resp.json()}[items]</arg>
+<arg>${count}</arg>
+<doc>Verifies that the length of the given item is correct.</doc>
+<status status="PASS" start="2026-03-13T15:58:35.360302" elapsed="0.000471"/>
+</kw>
+<arg>1</arg>
+<arg>item</arg>
+<status status="PASS" start="2026-03-13T15:58:33.326301" elapsed="2.034567"/>
+</kw>
+<kw name="And the basket total is greater than">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:37.407227" level="INFO">GET Request : url=http://localhost:5001/basket 
+ path_url=/basket 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:37.407292" level="INFO">GET Response : url=http://localhost:5001/basket 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:37 GMT', 'Content-Type': 'application/json', 'Content-Length': '105', 'Connection': 'close'} 
+ body={"discount_applied":null,"items":{"BK001":{"name":"Clean Code","qty":1}},"subtotal":29.99,"total":29.99}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:37.407412" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2026-03-13T15:58:35.361642" elapsed="2.045792"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${resp.json()}[total] &gt; ${amount}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-13T15:58:37.407551" elapsed="0.000572"/>
+</kw>
+<arg>0</arg>
+<status status="PASS" start="2026-03-13T15:58:35.361394" elapsed="2.046829"/>
+</kw>
+<doc>AC-001: A book in stock is added to the basket</doc>
+<status status="PASS" start="2026-03-13T15:58:27.207049" elapsed="10.201574"/>
+</test>
+<test id="s1-t2" name="Cannot Add Out Of Stock Book" line="23">
+<kw name="Clear Basket" type="SETUP">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:39.453474" level="INFO">DELETE Request : url=http://localhost:5001/basket/clear 
+ path_url=/basket/clear 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:39.453533" level="INFO">DELETE Response : url=http://localhost:5001/basket/clear 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:39 GMT', 'Content-Type': 'application/json', 'Content-Length': '29', 'Connection': 'close'} 
+ body={"message":"Basket cleared"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:39.453625" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/clear</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-03-13T15:58:37.409734" elapsed="2.043912"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-13T15:58:39.454142" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-13T15:58:39.453762" elapsed="0.000450"/>
+</kw>
+<status status="PASS" start="2026-03-13T15:58:37.409554" elapsed="2.044748"/>
+</kw>
+<kw name="When the customer tries to add book">
+<kw name="Convert To Integer" owner="BuiltIn">
+<msg time="2026-03-13T15:58:39.455257" level="INFO">${qty_int} = 1</msg>
+<var>${qty_int}</var>
+<arg>${qty}</arg>
+<doc>Converts the given item to an integer number.</doc>
+<status status="PASS" start="2026-03-13T15:58:39.455110" elapsed="0.000167"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-13T15:58:39.455571" level="INFO">${body} = {'book_id': 'BK003', 'qty': 1}</msg>
+<var>${body}</var>
+<arg>book_id=${book_id}</arg>
+<arg>qty=${qty_int}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-13T15:58:39.455366" elapsed="0.000226"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:41.497555" level="INFO">POST Request : url=http://localhost:5001/basket/item 
+ path_url=/basket/item 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '30', 'Content-Type': 'application/json'} 
+ body=b'{"book_id": "BK003", "qty": 1}' 
+ </msg>
+<msg time="2026-03-13T15:58:41.497614" level="INFO">POST Response : url=http://localhost:5001/basket/item 
+ status=409, reason=CONFLICT 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:41 GMT', 'Content-Type': 'application/json', 'Content-Length': '31', 'Connection': 'close'} 
+ body={"error":"Insufficient stock"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:41.497709" level="INFO">${resp} = &lt;Response [409]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/item</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-03-13T15:58:39.455675" elapsed="2.042056"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:58:41.498039" level="INFO">${LAST_RESPONSE} = &lt;Response [409]&gt;</msg>
+<arg>${LAST_RESPONSE}</arg>
+<arg>${resp}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-03-13T15:58:41.497859" elapsed="0.000214"/>
+</kw>
+<arg>BK003</arg>
+<arg>qty=1</arg>
+<status status="PASS" start="2026-03-13T15:58:39.454864" elapsed="2.043268"/>
+</kw>
+<kw name="Then the response status should be">
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-13T15:58:41.499341" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${LAST_RESPONSE.status_code}</arg>
+<arg>${expected_status}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-13T15:58:41.498986" elapsed="0.000402"/>
+</kw>
+<arg>409</arg>
+<status status="PASS" start="2026-03-13T15:58:41.498639" elapsed="0.000801"/>
+</kw>
+<doc>AC-002: Out-of-stock books cannot be added</doc>
+<status status="PASS" start="2026-03-13T15:58:37.409212" elapsed="4.090453"/>
+</test>
+<test id="s1-t3" name="Remove Book From Basket" line="30">
+<kw name="Clear Basket" type="SETUP">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:43.539869" level="INFO">DELETE Request : url=http://localhost:5001/basket/clear 
+ path_url=/basket/clear 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:43.539936" level="INFO">DELETE Response : url=http://localhost:5001/basket/clear 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:43 GMT', 'Content-Type': 'application/json', 'Content-Length': '29', 'Connection': 'close'} 
+ body={"message":"Basket cleared"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:43.540034" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/clear</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-03-13T15:58:41.500811" elapsed="2.039244"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-13T15:58:43.541038" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-13T15:58:43.540173" elapsed="0.000949"/>
+</kw>
+<status status="PASS" start="2026-03-13T15:58:41.500629" elapsed="2.040650"/>
+</kw>
+<kw name="Given the customer adds book">
+<kw name="Convert To Integer" owner="BuiltIn">
+<msg time="2026-03-13T15:58:43.541964" level="INFO">${qty_int} = 1</msg>
+<var>${qty_int}</var>
+<arg>${qty}</arg>
+<doc>Converts the given item to an integer number.</doc>
+<status status="PASS" start="2026-03-13T15:58:43.541823" elapsed="0.000160"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-13T15:58:43.542260" level="INFO">${body} = {'book_id': 'BK001', 'qty': 1}</msg>
+<var>${body}</var>
+<arg>book_id=${book_id}</arg>
+<arg>qty=${qty_int}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-13T15:58:43.542072" elapsed="0.000207"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:45.558307" level="INFO">POST Request : url=http://localhost:5001/basket/item 
+ path_url=/basket/item 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '30', 'Content-Type': 'application/json'} 
+ body=b'{"book_id": "BK001", "qty": 1}' 
+ </msg>
+<msg time="2026-03-13T15:58:45.558370" level="INFO">POST Response : url=http://localhost:5001/basket/item 
+ status=201, reason=CREATED 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:45 GMT', 'Content-Type': 'application/json', 'Content-Length': '41', 'Connection': 'close'} 
+ body={"basket":{"BK001":1},"message":"Added"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:45.558503" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/item</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=201</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-03-13T15:58:43.542363" elapsed="2.016172"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:58:45.559048" level="INFO">${LAST_RESPONSE} = &lt;Response [201]&gt;</msg>
+<arg>${LAST_RESPONSE}</arg>
+<arg>${resp}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-03-13T15:58:45.558730" elapsed="0.000401"/>
+</kw>
+<arg>BK001</arg>
+<arg>qty=1</arg>
+<status status="PASS" start="2026-03-13T15:58:43.541595" elapsed="2.017681"/>
+</kw>
+<kw name="When the customer removes book">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:47.589858" level="INFO">DELETE Request : url=http://localhost:5001/basket/item/BK001 
+ path_url=/basket/item/BK001 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:47.589948" level="INFO">DELETE Response : url=http://localhost:5001/basket/item/BK001 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:47 GMT', 'Content-Type': 'application/json', 'Content-Length': '22', 'Connection': 'close'} 
+ body={"message":"Removed"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:47.590162" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/item/${book_id}</arg>
+<arg>expected_status=200</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-03-13T15:58:45.560039" elapsed="2.030147"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:58:47.590590" level="INFO">${LAST_RESPONSE} = &lt;Response [200]&gt;</msg>
+<arg>${LAST_RESPONSE}</arg>
+<arg>${resp}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-03-13T15:58:47.590391" elapsed="0.000234"/>
+</kw>
+<arg>BK001</arg>
+<status status="PASS" start="2026-03-13T15:58:45.559813" elapsed="2.030869"/>
+</kw>
+<kw name="Then the basket contains">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:49.621237" level="INFO">GET Request : url=http://localhost:5001/basket 
+ path_url=/basket 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:49.621322" level="INFO">GET Response : url=http://localhost:5001/basket 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:49 GMT', 'Content-Type': 'application/json', 'Content-Length': '60', 'Connection': 'close'} 
+ body={"discount_applied":null,"items":{},"subtotal":0,"total":0}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:49.621454" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2026-03-13T15:58:47.591760" elapsed="2.029725"/>
+</kw>
+<kw name="Length Should Be" owner="BuiltIn">
+<msg time="2026-03-13T15:58:49.622276" level="INFO">Length is 0.</msg>
+<arg>${resp.json()}[items]</arg>
+<arg>${count}</arg>
+<doc>Verifies that the length of the given item is correct.</doc>
+<status status="PASS" start="2026-03-13T15:58:49.621641" elapsed="0.000711"/>
+</kw>
+<arg>0</arg>
+<arg>items</arg>
+<status status="PASS" start="2026-03-13T15:58:47.591222" elapsed="2.031252"/>
+</kw>
+<doc>AC-003: A book in the basket can be removed</doc>
+<status status="PASS" start="2026-03-13T15:58:41.500283" elapsed="8.122747"/>
+</test>
+<test id="s1-t4" name="Apply Valid Discount Code" line="38">
+<kw name="Clear Basket" type="SETUP">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:51.657606" level="INFO">DELETE Request : url=http://localhost:5001/basket/clear 
+ path_url=/basket/clear 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:51.657785" level="INFO">DELETE Response : url=http://localhost:5001/basket/clear 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:51 GMT', 'Content-Type': 'application/json', 'Content-Length': '29', 'Connection': 'close'} 
+ body={"message":"Basket cleared"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:51.658076" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/clear</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-03-13T15:58:49.624443" elapsed="2.033753"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-13T15:58:51.659686" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-13T15:58:51.658540" elapsed="0.001320"/>
+</kw>
+<status status="PASS" start="2026-03-13T15:58:49.624247" elapsed="2.035814"/>
+</kw>
+<kw name="Given the customer adds book">
+<kw name="Convert To Integer" owner="BuiltIn">
+<msg time="2026-03-13T15:58:51.662544" level="INFO">${qty_int} = 1</msg>
+<var>${qty_int}</var>
+<arg>${qty}</arg>
+<doc>Converts the given item to an integer number.</doc>
+<status status="PASS" start="2026-03-13T15:58:51.661841" elapsed="0.000796"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-13T15:58:51.663680" level="INFO">${body} = {'book_id': 'BK001', 'qty': 1}</msg>
+<var>${body}</var>
+<arg>book_id=${book_id}</arg>
+<arg>qty=${qty_int}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-13T15:58:51.662981" elapsed="0.000773"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:53.676611" level="INFO">POST Request : url=http://localhost:5001/basket/item 
+ path_url=/basket/item 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '30', 'Content-Type': 'application/json'} 
+ body=b'{"book_id": "BK001", "qty": 1}' 
+ </msg>
+<msg time="2026-03-13T15:58:53.676698" level="INFO">POST Response : url=http://localhost:5001/basket/item 
+ status=201, reason=CREATED 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:53 GMT', 'Content-Type': 'application/json', 'Content-Length': '41', 'Connection': 'close'} 
+ body={"basket":{"BK001":1},"message":"Added"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:53.676839" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/item</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=201</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-03-13T15:58:51.664078" elapsed="2.012794"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:58:53.677319" level="INFO">${LAST_RESPONSE} = &lt;Response [201]&gt;</msg>
+<arg>${LAST_RESPONSE}</arg>
+<arg>${resp}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-03-13T15:58:53.677058" elapsed="0.000314"/>
+</kw>
+<arg>BK001</arg>
+<arg>qty=1</arg>
+<status status="PASS" start="2026-03-13T15:58:51.661040" elapsed="2.016418"/>
+</kw>
+<kw name="When the customer applies discount code">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-13T15:58:53.678966" level="INFO">${body} = {'code': 'SAVE10'}</msg>
+<var>${body}</var>
+<arg>code=${code}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-13T15:58:53.678702" elapsed="0.000299"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:55.708749" level="INFO">POST Request : url=http://localhost:5001/basket/discount 
+ path_url=/basket/discount 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '18', 'Content-Type': 'application/json'} 
+ body=b'{"code": "SAVE10"}' 
+ </msg>
+<msg time="2026-03-13T15:58:55.708824" level="INFO">POST Response : url=http://localhost:5001/basket/discount 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:55 GMT', 'Content-Type': 'application/json', 'Content-Length': '49', 'Connection': 'close'} 
+ body={"message":"Discount SAVE10 applied","rate":0.1}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:55.708964" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/discount</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=200</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-03-13T15:58:53.679164" elapsed="2.029824"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:58:55.709346" level="INFO">${LAST_RESPONSE} = &lt;Response [200]&gt;</msg>
+<arg>${LAST_RESPONSE}</arg>
+<arg>${resp}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-03-13T15:58:55.709141" elapsed="0.000246"/>
+</kw>
+<arg>SAVE10</arg>
+<status status="PASS" start="2026-03-13T15:58:53.678237" elapsed="2.031216"/>
+</kw>
+<kw name="Then the basket total includes a 10 percent discount">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:57.767470" level="INFO">GET Request : url=http://localhost:5001/basket 
+ path_url=/basket 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:57.767528" level="INFO">GET Response : url=http://localhost:5001/basket 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:57 GMT', 'Content-Type': 'application/json', 'Content-Length': '109', 'Connection': 'close'} 
+ body={"discount_applied":"SAVE10","items":{"BK001":{"name":"Clean Code","qty":1}},"subtotal":29.99,"total":26.99}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:57.767625" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2026-03-13T15:58:55.710324" elapsed="2.057323"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:58:57.768177" level="INFO">${subtotal} = 29.99</msg>
+<var>${subtotal}</var>
+<arg>${resp.json()}[subtotal]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-13T15:58:57.767768" elapsed="0.000431"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:58:57.768897" level="INFO">${total} = 26.99</msg>
+<var>${total}</var>
+<arg>${resp.json()}[total]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-13T15:58:57.768357" elapsed="0.000562"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2026-03-13T15:58:57.769181" level="INFO">${expected} = 26.99</msg>
+<var>${expected}</var>
+<arg>round(${subtotal} * 0.9, 2)</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-03-13T15:58:57.769003" elapsed="0.000199"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<arg>${total}</arg>
+<arg>${expected}</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2026-03-13T15:58:57.769280" elapsed="0.000144"/>
+</kw>
+<status status="PASS" start="2026-03-13T15:58:55.709987" elapsed="2.059493"/>
+</kw>
+<doc>AC-004: SAVE10 reduces total by 10%</doc>
+<status status="PASS" start="2026-03-13T15:58:49.623857" elapsed="8.145839"/>
+</test>
+<test id="s1-t5" name="Invalid Discount Code Is Rejected" line="46">
+<kw name="Clear Basket" type="SETUP">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-03-13T15:58:59.810182" level="INFO">DELETE Request : url=http://localhost:5001/basket/clear 
+ path_url=/basket/clear 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-03-13T15:58:59.810251" level="INFO">DELETE Response : url=http://localhost:5001/basket/clear 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:58:59 GMT', 'Content-Type': 'application/json', 'Content-Length': '29', 'Connection': 'close'} 
+ body={"message":"Basket cleared"}
+ 
+ </msg>
+<msg time="2026-03-13T15:58:59.810350" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/clear</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-03-13T15:58:57.770876" elapsed="2.039496"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-13T15:58:59.810885" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-13T15:58:59.810498" elapsed="0.000438"/>
+</kw>
+<status status="PASS" start="2026-03-13T15:58:57.770705" elapsed="2.040311"/>
+</kw>
+<kw name="When the customer tries to apply discount code">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-13T15:58:59.812072" level="INFO">${body} = {'code': 'BOGUS99'}</msg>
+<var>${body}</var>
+<arg>code=${code}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-13T15:58:59.811879" elapsed="0.000219"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-03-13T15:59:01.839117" level="INFO">POST Request : url=http://localhost:5001/basket/discount 
+ path_url=/basket/discount 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '19', 'Content-Type': 'application/json'} 
+ body=b'{"code": "BOGUS99"}' 
+ </msg>
+<msg time="2026-03-13T15:59:01.839186" level="INFO">POST Response : url=http://localhost:5001/basket/discount 
+ status=400, reason=BAD REQUEST 
+ headers={'Server': 'Werkzeug/3.1.6 Python/3.14.3', 'Date': 'Fri, 13 Mar 2026 22:59:01 GMT', 'Content-Type': 'application/json', 'Content-Length': '45', 'Connection': 'close'} 
+ body={"error":"Invalid or expired discount code"}
+ 
+ </msg>
+<msg time="2026-03-13T15:59:01.839293" level="INFO">${resp} = &lt;Response [400]&gt;</msg>
+<var>${resp}</var>
+<arg>${BASE_URL}/basket/discount</arg>
+<arg>json=${body}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-03-13T15:58:59.812191" elapsed="2.027124"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-03-13T15:59:01.839710" level="INFO">${LAST_RESPONSE} = &lt;Response [400]&gt;</msg>
+<arg>${LAST_RESPONSE}</arg>
+<arg>${resp}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-03-13T15:59:01.839492" elapsed="0.000275"/>
+</kw>
+<arg>BOGUS99</arg>
+<status status="PASS" start="2026-03-13T15:58:59.811559" elapsed="2.028317"/>
+</kw>
+<kw name="Then the response status should be">
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-03-13T15:59:01.841520" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${LAST_RESPONSE.status_code}</arg>
+<arg>${expected_status}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-03-13T15:59:01.841094" elapsed="0.000484"/>
+</kw>
+<arg>400</arg>
+<status status="PASS" start="2026-03-13T15:59:01.840543" elapsed="0.001120"/>
+</kw>
+<doc>AC-005: Unrecognised codes return an error</doc>
+<status status="PASS" start="2026-03-13T15:58:57.770340" elapsed="4.071589"/>
+</test>
+<doc>Acceptance tests for the Shopping Basket API
+Run with: robot features/basket.robot</doc>
+<status status="PASS" start="2026-03-13T15:58:26.563648" elapsed="35.279159"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="5" fail="0" skip="0" id="s1" name="Basket">Basket</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

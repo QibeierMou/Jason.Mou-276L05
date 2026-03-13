@@ -50,4 +50,63 @@ Invalid Discount Code Is Rejected
     Then the response status should be    400
 
 *** Keywords ***
-# ---- Add the keyword section here ----
+
+Clear Basket
+    ${resp}=    DELETE    ${BASE_URL}/basket/clear
+    Should Be Equal As Integers    ${resp.status_code}    200
+
+The basket is empty
+    ${resp}=    GET    ${BASE_URL}/basket
+    Should Be Equal    ${resp.json()}[items]    ${{{}}}
+
+The customer adds book
+    [Arguments]    ${book_id}    ${qty}=1
+    ${qty_int}=    Convert To Integer    ${qty}
+    ${body}=    Create Dictionary    book_id=${book_id}    qty=${qty_int}
+    ${resp}=    POST    ${BASE_URL}/basket/item    json=${body}    expected_status=201
+    Set Suite Variable    ${LAST_RESPONSE}    ${resp}
+
+The customer tries to add book
+    [Arguments]    ${book_id}    ${qty}=1
+    ${qty_int}=    Convert To Integer    ${qty}
+    ${body}=    Create Dictionary    book_id=${book_id}    qty=${qty_int}
+    ${resp}=    POST    ${BASE_URL}/basket/item    json=${body}    expected_status=any
+    Set Suite Variable    ${LAST_RESPONSE}    ${resp}
+
+The basket contains
+    [Arguments]    ${count}    ${unit}
+    ${resp}=    GET    ${BASE_URL}/basket
+    Length Should Be    ${resp.json()}[items]    ${count}
+
+The basket total is greater than
+    [Arguments]    ${amount}
+    ${resp}=    GET    ${BASE_URL}/basket
+    Should Be True    ${resp.json()}[total] > ${amount}
+
+The response status should be
+    [Arguments]    ${expected_status}
+    Should Be Equal As Integers    ${LAST_RESPONSE.status_code}    ${expected_status}
+
+The customer removes book
+    [Arguments]    ${book_id}
+    ${resp}=    DELETE    ${BASE_URL}/basket/item/${book_id}    expected_status=200
+    Set Suite Variable    ${LAST_RESPONSE}    ${resp}
+
+The customer applies discount code
+    [Arguments]    ${code}
+    ${body}=    Create Dictionary    code=${code}
+    ${resp}=    POST    ${BASE_URL}/basket/discount    json=${body}    expected_status=200
+    Set Suite Variable    ${LAST_RESPONSE}    ${resp}
+
+The customer tries to apply discount code
+    [Arguments]    ${code}
+    ${body}=    Create Dictionary    code=${code}
+    ${resp}=    POST    ${BASE_URL}/basket/discount    json=${body}    expected_status=any
+    Set Suite Variable    ${LAST_RESPONSE}    ${resp}
+
+The basket total includes a 10 percent discount
+    ${resp}=    GET    ${BASE_URL}/basket
+    ${subtotal}=    Set Variable    ${resp.json()}[subtotal]
+    ${total}=    Set Variable    ${resp.json()}[total]
+    ${expected}=    Evaluate    round(${subtotal} * 0.9, 2)
+    Should Be Equal As Numbers    ${total}    ${expected}
