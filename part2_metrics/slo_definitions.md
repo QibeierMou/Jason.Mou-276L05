@@ -42,6 +42,10 @@ Prometheus query: `histogram_quantile(0.95, rate(basket_request_duration_seconds
 ## TODO: Define SLI-003 yourself
 Choose a metric from the instrumented API and write:
 - SLI (formula and Prometheus metric)
+SlI = (invalid discount attempts / total discount attempts) x 100
 - SLO (target, window)
+Less than 5% of discount attempts should be invalid, measured over 30 days.
 - SLA (external commitment)
+Less than 10% of discount attempts should be invalid per month.
 - Error budget calculation
+We allow up to 5% invalid attempts before we have a problem.

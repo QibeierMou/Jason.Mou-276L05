@@ -89,9 +89,18 @@ def calculate_success_rate(metrics_text: str) -> float:
     float
         Success rate as a percentage, e.g. 98.76
     """
-    # TODO: replace this with your implementation
-    raise NotImplementedError("Implement calculate_success_rate()")
 
+    # TODO: replace this with your implementation
+    success = parse_counter(metrics_text, "basket_requests_total", {"status": "success"})
+    errors = parse_counter(metrics_text, "basket_requests_total", {"status": "error"})
+
+    total = success + errors
+
+    if total == 0:
+        return 100.0
+
+    success_rate = (total - errors) / total * 100
+    return round(success_rate, 2)
 
 # ── TODO: implement this function ─────────────────────────────────────────────
 
@@ -111,7 +120,10 @@ def check_slo(success_rate: float, slo_target: float) -> None:
         The SLO threshold (percentage)
     """
     # TODO: replace this with your implementation
-    raise NotImplementedError("Implement check_slo()")
+    if success_rate >= slo_target:
+        print(f"PASS  Success rate {success_rate:.2f}% meets SLO target of {slo_target}%")
+    else:
+        print(f"FAIL  Success rate {success_rate:.2f}% is BELOW SLO target of {slo_target}%")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
