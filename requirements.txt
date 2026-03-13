@@ -1,0 +1,8 @@
+robotframework==7.1
+robotframework-requests==0.9.7
+robotframework-pythonlibcore==4.4.1
+pytest==8.3.3
+requests==2.32.3
+flask==3.1.0
+prometheus_client==0.21.0
+locust==2.32.3

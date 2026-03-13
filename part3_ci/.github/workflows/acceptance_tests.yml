@@ -1,0 +1,45 @@
+name: Acceptance Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  acceptance-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Start Basket API
+      run: |
+        python part1_acceptance/basket_api.py &
+        sleep 2  # give Flask a moment to start
+
+    - name: Run Robot Framework acceptance tests
+      run: |
+        robot --outputdir robot_results part1_acceptance/features/basket.robot
+
+    - name: Upload Robot Framework report
+      uses: actions/upload-artifact@v4
+      if: always()   # upload even if tests fail
+      with:
+        name: robot-report
+        path: robot_results/
+
+    - name: Fail if Robot tests failed
+      if: failure()
+      run: |
+        echo "❌ Acceptance tests failed — merge blocked."
+        exit 1
